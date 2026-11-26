@@ -1,0 +1,13 @@
+{
+  "name": "canvas-iframes",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Canvas whiteboard + multiple iframes, REST API + WebSocket driven",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "ws": "^8.18.0"
+  }
+}

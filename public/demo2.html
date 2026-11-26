@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo 2 - 表单</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+      background: #0f172a;
+      color: #f1f5f9;
+      padding: 16px;
+    }
+    h2 { margin: 0 0 6px; font-size: 18px; }
+    .sub { color: #94a3b8; font-size: 12px; margin-bottom: 14px; }
+    label { display: block; font-size: 12px; color: #cbd5e1; margin: 10px 0 4px; }
+    input, select, textarea {
+      width: 100%;
+      padding: 7px 8px;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      background: #1e293b;
+      color: #f1f5f9;
+      font-size: 13px;
+    }
+    textarea { resize: vertical; }
+    button {
+      margin-top: 14px;
+      padding: 8px 14px;
+      border: none;
+      border-radius: 6px;
+      background: #22c55e;
+      color: #052e16;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover { background: #16a34a; }
+    .tags { display: flex; gap: 6px; margin-top: 12px; }
+    .tag { padding: 3px 8px; border-radius: 999px; background: #334155; font-size: 11px; cursor: pointer; }
+    .tag.on { background: #2563eb; color: #fff; }
+    .hint { margin-top: 14px; font-size: 11px; color: #64748b; }
+  </style>
+</head>
+<body>
+  <h2>意见反馈</h2>
+  <div class="sub">该 iframe 内部表单可正常填写与交互。</div>
+
+  <label>邮箱</label>
+  <input type="email" placeholder="you@example.com" />
+
+  <label>反馈类型</label>
+  <select>
+    <option>功能建议</option>
+    <option>Bug 反馈</option>
+    <option>其他</option>
+  </select>
+
+  <label>详细描述</label>
+  <textarea rows="4" placeholder="写点什么..."></textarea>
+
+  <div class="tags">
+    <span class="tag">产品</span>
+    <span class="tag">设计</span>
+    <span class="tag">研发</span>
+  </div>
+
+  <button>提交反馈</button>
+  <div class="hint">父页面：Ctrl+滚轮缩放，Ctrl+拖动移动此窗口。</div>
+
+  <script>
+    var tags = document.querySelectorAll(".tag");
+    var boxes = document.querySelectorAll("input,select,textarea");
+    boxes.forEach(function (el) {
+      el.addEventListener("click", function (e) { e.stopPropagation(); });
+    });
+    tags.forEach(function (t) {
+      t.addEventListener("click", function () { t.classList.toggle("on"); });
+    });
+  </script>
+</body>
+</html>

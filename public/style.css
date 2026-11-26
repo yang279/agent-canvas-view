@@ -1,0 +1,51 @@
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: #e5e5e5;
+}
+
+#viewport {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: #e5e5e5;
+}
+
+#world {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+#board {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+}
+
+.frame-wrap {
+  position: absolute;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.frame-wrap:hover {
+  outline: 2px solid #007dff;
+}
+
+.frame {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border: 0;
+}
