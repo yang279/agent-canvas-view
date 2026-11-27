@@ -33,8 +33,8 @@ npm start          # node server.js，默认端口 8000
 | `POST` | `/api/frames/bulk` | 批量新增，body `{ frames: [ {...} ] }`，非法项跳过 |
 | `GET` | `/api/frames` | 列出所有 iframe |
 | `PUT` | `/api/frames/:id` | 更新位置，body `{ x, y }`（拖拽后回传） |
-| `DELETE` | `/api/frames/:id` | 删除单个；`:id` 为 `all` 时清空 |
-| `DELETE` | `/api/frames` | body `{ ids? }`：传 ids 数组批量删除，缺省清空全部 |
+| `DELETE` | `/api/frames` | 批量删除，body `{ ids:[...] }`（必填非空数组） |
+| `DELETE` | `/api/frames/all` | 清空全部 |
 
 ### 连线
 
