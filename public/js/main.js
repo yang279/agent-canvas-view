@@ -149,6 +149,8 @@
         frames.updateFrame(msg.frame);
       } else if (msg.type === "center") {
         panCenter(msg.ids);
+      } else if (msg.type === "focus") {
+        fitCenter(msg.ids);
       } else if (msg.type === "zoom") {
         vp.zoomToScale(msg.scale);
       }
@@ -186,7 +188,7 @@
       if (i < list.length) {
         requestAnimationFrame(step);
       } else {
-        centerOn(null);
+        fitCenter(null);
       }
     }
 
@@ -221,8 +223,8 @@
     return { minX: minX, minY: minY, maxX: maxX, maxY: maxY };
   }
 
-  // 适配居中（缩放+居中）：批量新增后自动布局用
-  function centerOn(ids) {
+  // 适配居中（缩放+居中）：批量新增后自动布局 / focus 接口用
+  function fitCenter(ids) {
     var bbox = getCenterBBox(ids);
     if (!bbox) return;
     vp.fitOn(bbox, 120);

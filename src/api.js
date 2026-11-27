@@ -107,8 +107,29 @@ function createApiRouter(frameManager, broadcaster) {
     res.json({ ok: true, removed: result.removed });
   });
 
-  // 居中：ids 数组居中其并集；未传或空数组居中所有 iframe（画布居中）
+  // 居中（纯平移，不缩放）：ids 非空数组居中其并集
   router.post("/center", (req, res) => {
+    const body = req.body || {};
+    if (!Array.isArray(body.ids)) {
+      return res.status(400).json({ error: "ids 必须为数组" });
+    }
+    if (body.ids.length === 0) {
+      return res.status(400).json({ error: "ids 不能为空数组" });
+    }
+    const ids = body.ids
+      .map(Number)
+      .filter(function (n) {
+        return Number.isFinite(n) && frameManager.get(n);
+      });
+    if (ids.length === 0) {
+      return res.status(404).json({ error: "没有可居中的 iframe" });
+    }
+    broadcaster.broadcast({ type: "center", ids: ids });
+    res.json({ ok: true, ids: ids });
+  });
+
+  // 聚焦（居中 + 缩放适配）：未传或空数组 fit 所有画布，非空数组 fit 其并集
+  router.post("/focus", (req, res) => {
     const body = req.body || {};
     let ids = null;
     if (body.ids != null) {
@@ -122,11 +143,11 @@ function createApiRouter(frameManager, broadcaster) {
             return Number.isFinite(n) && frameManager.get(n);
           });
         if (ids.length === 0) {
-          return res.status(404).json({ error: "没有可居中的 iframe" });
+          return res.status(404).json({ error: "没有可聚焦的 iframe" });
         }
       }
     }
-    broadcaster.broadcast({ type: "center", ids: ids });
+    broadcaster.broadcast({ type: "focus", ids: ids });
     res.json({ ok: true, ids: ids });
   });
 

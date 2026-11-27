@@ -48,7 +48,8 @@ npm start          # node server.js，默认端口 8000
 | 方法 | 路径 | 说明 |
 |---|---|---|
 | `POST` | `/api/zoom` | 全局缩放，body `{ scale }`，锚点视口中心，越界自动夹在 0.001~10 |
-| `POST` | `/api/center` | 纯平移居中（不缩放），body `{ ids? }`（数字数组）；`ids` 居中其并集，未传或 `[]` 居中所有 |
+| `POST` | `/api/center` | 纯平移居中（不缩放），body `{ ids:[...] }`（非空数组必填）；未传/空 400 |
+| `POST` | `/api/focus` | 居中 + 缩放适配（fit 到视口），body `{ ids? }`；未传/空 fit 所有 |
 
 示例：
 
@@ -59,8 +60,11 @@ curl -X POST http://localhost:8000/api/zoom -H "Content-Type: application/json" 
 # 居中某几个画板（不改变缩放）
 curl -X POST http://localhost:8000/api/center -H "Content-Type: application/json" -d '{"ids":[1,2,3]}'
 
-# 画布居中（居中所有）
-curl -X POST http://localhost:8000/api/center -H "Content-Type: application/json" -d '{"ids":[]}'
+# 聚焦（居中 + 缩放适配到视口）
+curl -X POST http://localhost:8000/api/focus -H "Content-Type: application/json" -d '{"ids":[123]}'
+
+# 聚焦所有画布（缩放适配）
+curl -X POST http://localhost:8000/api/focus -H "Content-Type: application/json" -d '{"ids":[]}'
 ```
 
 > 注：`scale=1` 即 100%（世界坐标与屏幕像素 1:1）。「针对某画板放大到 100%」= `/api/center {"ids":[123]}` + `/api/zoom {scale:1}`，两步任意顺序均可。
@@ -78,5 +82,6 @@ curl -X POST http://localhost:8000/api/center -H "Content-Type: application/json
 | `frame:remove` | `{ id }` | 删除单个 |
 | `frames:remove` | `{ ids }` | 批量删除 |
 | `frames:clear` | — | 清空全部 |
-| `center` | `{ ids }` | 纯平移居中（`ids` 为数组或 null） |
+| `center` | `{ ids }` | 纯平移居中（`ids` 非空数组） |
+| `focus` | `{ ids }` | 居中 + 缩放适配（`ids` 为数组或 null） |
 | `zoom` | `{ scale }` | 全局缩放 |
