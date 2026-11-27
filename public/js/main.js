@@ -227,7 +227,7 @@
   function fitCenter(ids) {
     var bbox = getCenterBBox(ids);
     if (!bbox) return;
-    vp.fitOn(bbox, 120);
+    vp.fitOn(bbox, 60);
   }
 
   // 纯平移居中（不缩放）：/api/center 触发
