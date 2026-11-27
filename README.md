@@ -34,7 +34,7 @@ npm start          # node server.js，默认端口 8000
 | `GET` | `/api/frames` | 列出所有 iframe |
 | `PUT` | `/api/frames/:id` | 更新位置，body `{ x, y }`（拖拽后回传） |
 | `DELETE` | `/api/frames/:id` | 删除单个；`:id` 为 `all` 时清空 |
-| `DELETE` | `/api/frames` | 清空全部 |
+| `DELETE` | `/api/frames` | body `{ ids? }`：传 ids 数组批量删除，缺省清空全部 |
 
 ### 连线
 
@@ -76,6 +76,7 @@ curl -X POST http://localhost:8000/api/center -H "Content-Type: application/json
 | `frames:add` | `{ frames, updates }` | 批量新增 |
 | `frame:update` | `{ frame }` | 位置 / 连线变更 |
 | `frame:remove` | `{ id }` | 删除单个 |
+| `frames:remove` | `{ ids }` | 批量删除 |
 | `frames:clear` | — | 清空全部 |
 | `center` | `{ ids }` | 纯平移居中（`ids` 为数组或 null） |
 | `zoom` | `{ scale }` | 全局缩放 |

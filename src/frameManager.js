@@ -103,6 +103,18 @@ class FrameManager {
     return { existed: existed, changed: changed };
   }
 
+  // 批量删除：逐个删除存在的（跳过不存在），最后统一布局一次
+  // 返回 { removed, changed }，removed 为删除成功的 id 列表
+  removeFrames(ids) {
+    const removed = [];
+    ids.forEach((id) => {
+      const n = Number(id);
+      if (this.frames.delete(n)) removed.push(n);
+    });
+    const changed = this.layout();
+    return { removed: removed, changed: changed };
+  }
+
   clear() {
     this.frames.clear();
   }

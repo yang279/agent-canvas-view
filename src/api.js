@@ -100,11 +100,26 @@ function createApiRouter(frameManager, broadcaster) {
     res.json({ ok: true, id: Number(id) });
   });
 
-  // 清空全部
+  // 删除：无 ids 清空全部；body { ids:[...] } 批量删除指定
   router.delete("/frames", (req, res) => {
-    frameManager.clear();
-    broadcaster.broadcast({ type: "frames:clear" });
-    res.json({ ok: true });
+    const body = req.body || {};
+    if (body.ids == null) {
+      frameManager.clear();
+      broadcaster.broadcast({ type: "frames:clear" });
+      return res.json({ ok: true });
+    }
+    if (!Array.isArray(body.ids) || body.ids.length === 0) {
+      return res.status(400).json({ error: "ids 必须为非空数组" });
+    }
+    const result = frameManager.removeFrames(body.ids);
+    if (result.removed.length === 0) {
+      return res.status(404).json({ error: "没有可删除的 iframe" });
+    }
+    broadcaster.broadcast({ type: "frames:remove", ids: result.removed });
+    (result.changed || []).forEach(function (f) {
+      broadcaster.broadcast({ type: "frame:update", frame: f });
+    });
+    res.json({ ok: true, removed: result.removed });
   });
 
   // 居中：ids 数组居中其并集；未传或空数组居中所有 iframe（画布居中）

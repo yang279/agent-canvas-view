@@ -63,6 +63,19 @@
     this.notifyUpdate();
   };
 
+  // 批量删除：一次遍历删 DOM，最后统一 notifyUpdate 一次
+  Frames.prototype.removeMany = function (ids) {
+    if (!Array.isArray(ids)) return;
+    var self = this;
+    ids.forEach(function (id) {
+      var frame = self.frames.get(id);
+      if (!frame) return;
+      if (frame.wrap.parentNode) frame.wrap.parentNode.removeChild(frame.wrap);
+      self.frames.delete(id);
+    });
+    this.notifyUpdate();
+  };
+
   // 更新 frame（frame:update 广播）：同步 x/y 位置 + connectionLineIds + 重新布局 iframe DOM
   Frames.prototype.updateFrame = function (frameData) {
     var frame = this.frames.get(frameData.id);
