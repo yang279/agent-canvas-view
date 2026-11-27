@@ -22,7 +22,7 @@ function createApiRouter(frameManager, broadcaster) {
         broadcaster.broadcast({ type: "frame:update", frame: f });
       }
     });
-    broadcaster.broadcast({ type: "center", id: null });
+    broadcaster.broadcast({ type: "focus", ids: null });
     res.json({ id: result.frame.id, frame: result.frame });
   });
 

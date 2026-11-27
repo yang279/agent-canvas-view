@@ -96,13 +96,6 @@ class FrameManager {
     return { results: results, changed: changed };
   }
 
-  removeFrame(id) {
-    id = Number(id);
-    const existed = this.frames.delete(id);
-    const changed = this.layout();
-    return { existed: existed, changed: changed };
-  }
-
   // 批量删除：逐个删除存在的（跳过不存在），最后统一布局一次
   // 返回 { removed, changed }，removed 为删除成功的 id 列表
   removeFrames(ids) {
