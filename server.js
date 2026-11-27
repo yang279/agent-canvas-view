@@ -28,4 +28,5 @@ server.listen(PORT, () => {
   console.log(`[canvas] http://localhost:${PORT}`);
   console.log(`[canvas] ws://localhost:${PORT}/ws`);
   console.log(`[canvas] POST /api/frames  DELETE /api/frames/:id  GET /api/frames`);
+  console.log(`[canvas] POST /api/zoom  POST /api/center`);
 });

@@ -118,6 +118,17 @@ function createApiRouter(frameManager, broadcaster) {
     res.json({ ok: true, id: id });
   });
 
+  // 全局缩放：设置画布缩放比（视口中心锚点），越界由前端 clamp
+  router.post("/zoom", (req, res) => {
+    const body = req.body || {};
+    const scale = body.scale;
+    if (typeof scale !== "number" || !Number.isFinite(scale)) {
+      return res.status(400).json({ error: "scale 必须为数字" });
+    }
+    broadcaster.broadcast({ type: "zoom", scale: scale });
+    res.json({ ok: true, scale: scale });
+  });
+
   // 列表
   router.get("/frames", (req, res) => {
     res.json({ frames: frameManager.list() });

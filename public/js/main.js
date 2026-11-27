@@ -146,7 +146,9 @@
       } else if (msg.type === "frame:update") {
         frames.updateFrame(msg.frame);
       } else if (msg.type === "center") {
-        centerOn(msg.id);
+        panCenter(msg.id);
+      } else if (msg.type === "zoom") {
+        vp.zoomToScale(msg.scale);
       }
     };
 
@@ -193,25 +195,36 @@
     step();
   }
 
-  // 居中：有 id 居中单个 iframe，无 id 居中所有 iframe（画布居中），均不缩放
-  function centerOn(id) {
-    var bbox = null;
+  // 计算居中目标包围盒：有 id 取单个 iframe，无 id 取所有 iframe 并集
+  function getCenterBBox(id) {
     if (id != null) {
       var f = frames.get(id);
-      if (!f) return;
-      bbox = { minX: f.x, minY: f.y, maxX: f.x + f.w, maxY: f.y + f.h };
-    } else {
-      var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-      frames.frames.forEach(function (fr) {
-        minX = Math.min(minX, fr.x);
-        minY = Math.min(minY, fr.y);
-        maxX = Math.max(maxX, fr.x + fr.w);
-        maxY = Math.max(maxY, fr.y + fr.h);
-      });
-      if (minX === Infinity) return; // 无 iframe
-      bbox = { minX: minX, minY: minY, maxX: maxX, maxY: maxY };
+      if (!f) return null;
+      return { minX: f.x, minY: f.y, maxX: f.x + f.w, maxY: f.y + f.h };
     }
+    var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    frames.frames.forEach(function (fr) {
+      minX = Math.min(minX, fr.x);
+      minY = Math.min(minY, fr.y);
+      maxX = Math.max(maxX, fr.x + fr.w);
+      maxY = Math.max(maxY, fr.y + fr.h);
+    });
+    if (minX === Infinity) return null; // 无 iframe
+    return { minX: minX, minY: minY, maxX: maxX, maxY: maxY };
+  }
+
+  // 适配居中（缩放+居中）：批量新增后自动布局用
+  function centerOn(id) {
+    var bbox = getCenterBBox(id);
+    if (!bbox) return;
     vp.fitOn(bbox, 120);
+  }
+
+  // 纯平移居中（不缩放）：/api/center 触发
+  function panCenter(id) {
+    var bbox = getCenterBBox(id);
+    if (!bbox) return;
+    vp.centerOn(bbox);
   }
 
   connectWS();

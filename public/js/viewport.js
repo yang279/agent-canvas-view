@@ -53,6 +53,13 @@
     this.apply();
   };
 
+  // 绝对缩放：设置全局缩放比为 scale（视口中心锚点，内部 clamp 到 min/max）
+  Viewport.prototype.zoomToScale = function (scale) {
+    var px = this.viewportEl.clientWidth / 2;
+    var py = this.viewportEl.clientHeight / 2;
+    this.zoomAt(px, py, scale / this.scale);
+  };
+
   // 滚轮方向累积为缩放"速度"，锚点记住鼠标位置
   Viewport.prototype.addZoomVel = function (px, py, delta) {
     this.zoomAnchor = { x: px, y: py };
