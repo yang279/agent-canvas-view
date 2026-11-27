@@ -47,14 +47,6 @@
     return this.frames.get(id);
   };
 
-  Frames.prototype.remove = function (id) {
-    var frame = this.frames.get(id);
-    if (!frame) return;
-    if (frame.wrap.parentNode) frame.wrap.parentNode.removeChild(frame.wrap);
-    this.frames.delete(id);
-    this.notifyUpdate();
-  };
-
   Frames.prototype.removeAll = function () {
     this.frames.forEach(function (frame) {
       if (frame.wrap.parentNode) frame.wrap.parentNode.removeChild(frame.wrap);

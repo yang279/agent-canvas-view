@@ -79,7 +79,6 @@ curl -X POST http://localhost:8000/api/focus -H "Content-Type: application/json"
 | `frame:add` | `{ frame }` | 新增单个 |
 | `frames:add` | `{ frames, updates }` | 批量新增 |
 | `frame:update` | `{ frame }` | 位置 / 连线变更 |
-| `frame:remove` | `{ id }` | 删除单个 |
 | `frames:remove` | `{ ids }` | 批量删除 |
 | `frames:clear` | — | 清空全部 |
 | `center` | `{ ids }` | 纯平移居中（`ids` 非空数组） |

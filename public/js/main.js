@@ -139,8 +139,6 @@
         board.draw();
       } else if (msg.type === "frames:add") {
         addLocalBatch(msg);
-      } else if (msg.type === "frame:remove") {
-        frames.remove(msg.id);
       } else if (msg.type === "frames:remove") {
         frames.removeMany(msg.ids);
       } else if (msg.type === "frames:clear") {
