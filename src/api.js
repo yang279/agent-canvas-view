@@ -107,15 +107,27 @@ function createApiRouter(frameManager, broadcaster) {
     res.json({ ok: true });
   });
 
-  // 居中：有 id 居中该 iframe，无 id 居中所有 iframe（画布居中）
+  // 居中：ids 数组居中其并集；未传或空数组居中所有 iframe（画布居中）
   router.post("/center", (req, res) => {
     const body = req.body || {};
-    const id = body.id != null ? Number(body.id) : null;
-    if (id != null && !frameManager.get(id)) {
-      return res.status(404).json({ error: `iframe id ${id} 不存在` });
+    let ids = null;
+    if (body.ids != null) {
+      if (!Array.isArray(body.ids)) {
+        return res.status(400).json({ error: "ids 必须为数组" });
+      }
+      if (body.ids.length > 0) {
+        ids = body.ids
+          .map(Number)
+          .filter(function (n) {
+            return Number.isFinite(n) && frameManager.get(n);
+          });
+        if (ids.length === 0) {
+          return res.status(404).json({ error: "没有可居中的 iframe" });
+        }
+      }
     }
-    broadcaster.broadcast({ type: "center", id: id });
-    res.json({ ok: true, id: id });
+    broadcaster.broadcast({ type: "center", ids: ids });
+    res.json({ ok: true, ids: ids });
   });
 
   // 全局缩放：设置画布缩放比（视口中心锚点），越界由前端 clamp
